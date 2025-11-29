@@ -20,11 +20,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Adiciona lista de participantes (agora com chips e mailto)
+        let participantsHtml = "";
+        if (details.participants.length > 0) {
+          participantsHtml = `
+            <div class="participants-section">
+              <p><strong>Participants (${details.participants.length}):</strong></p>
+              <div class="participants-list">
+                ${details.participants
+                  .map(email => {
+                    const label = email.split("@")[0];
+                    return `<span class="participant-chip" title="${email}"><a href="mailto:${email}">${label}</a></span>`;
+                  })
+                  .join("")}
+              </div>
+            </div>
+          `;
+        } else {
+          participantsHtml = `<p><strong>Participants:</strong> None yet</p>`;
+        }
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsHtml}
         `;
 
         activitiesList.appendChild(activityCard);
